@@ -1,0 +1,10 @@
+[Unit]
+Description= Install Node Exporter 
+
+[Service]
+Type=simple
+StandardOutput=journal
+ExecStart=/usr/local/bin/node_exporter
+
+[Install]
+WantedBy=default.target

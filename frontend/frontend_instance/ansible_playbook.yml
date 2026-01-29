@@ -1,0 +1,59 @@
+---
+- name: frontend play
+  hosts: awsservers
+  become: true
+  remote_user: admin
+
+  tasks:
+    - name: Mise à jour de la liste des paquets
+      apt:
+        update_cache: yes
+
+    - name: Installation des paquets nécessaires pour ajouter un nouveau dépôt via HTTPS
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - gnupg2
+        state: present
+
+    - name: Importer la clé GPG du dépôt Docker
+      apt_key:
+        url: https://download.docker.com/linux/debian/gpg
+        state: present
+
+    - name: Ajouter le dépôt APT stable de Docker
+      apt_repository:
+        repo: 'deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_lsb.codename }} stable'
+        state: present
+
+    - name: Mise à jour de la liste des paquets avec les nouveaux dépôts ajoutés
+      apt:
+        update_cache: yes
+
+    - name: Installation de la dernière version de Docker CE
+      apt:
+        name: docker-ce
+        state: present
+
+    - name: Ajouter l'utilisateur courant au groupe docker
+      user:
+        name: '{{ ansible_user }}'
+        groups: docker
+        append: yes
+
+    - name: Installation de Docker Compose
+      get_url:
+        url: 'https://github.com/docker/compose/releases/download/v2.27.1/docker-compose-{{ ansible_system | lower }}-{{ ansible_architecture }}'
+        dest: /usr/local/bin/docker-compose
+        mode: '0755'
+
+    - name: Vérification de l'installation de Docker Compose
+      command: docker-compose --version
+      register: docker_compose_version
+
+    - name: Afficher la version de Docker Compose installée
+      debug:
+        msg: '{{ docker_compose_version.stdout }}'

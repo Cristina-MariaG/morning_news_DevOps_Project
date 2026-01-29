@@ -1,0 +1,29 @@
+---
+- name: frontend play
+  hosts: awsservers
+  become: true
+  remote_user: admin
+
+  tasks:
+    - name: Install make and git
+      apt:
+        name:
+          - make
+          - git
+        state: present
+        update_cache: yes
+
+    - name: Install docker
+      apt:
+        name:
+          - docker.io
+        state: present
+        update_cache: yes
+
+    - name: Install docker-compose
+      apt:
+        name:
+          - docker-compose
+        state: present
+        update_cache: yes
+

@@ -1,0 +1,11 @@
+data
+console_libraries
+prometheus
+promtool
+.terraform.lock.hcl
+.terraform
+.ssh/
+.env
+inventory.ini
+terraform.tfstate.backup
+terraform.tfstate

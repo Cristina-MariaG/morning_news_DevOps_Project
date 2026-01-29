@@ -1,0 +1,9 @@
+services:
+  backend:
+    image: miksiei-back
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "3030:3000"
+    container_name: miksiei-backend

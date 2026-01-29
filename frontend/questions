@@ -1,0 +1,87 @@
+1-Différence entre VM et Container
+2- qu'est ce qu'un cluster
+comment fonctionne un vpn, comment je peux remplacer le reverse proxy
+Des questions sur les branches sur gitlab sur jira genre est ce que je connais un autre outil de gestion de projet, SSH principle, reverse proxy, modèle OSI, VPN site site
+Pourquoi on a choisit de travailler avec azure sur la base de donnée
+Comment remplacer un reverse proxy
+Comment fonctionne concrètement
+Les couches réseaux
+Mettez les commentaires dans le code
+
+
+différence entre IPV4 et IPV6
+nommer d'autres outils de monitoring que Grafana Prometheus et CloudWatch
+différence entre VM et conteneur
+
+VPN : lien entre des ordi distantes connectés à des réseaux locaux différents, qui isole leurs échanges du reste du trafic
+x
+1. Différence entre VM et Container
+VM (Machine Virtuelle) :
+
+Isolation : Chaque VM a son propre système d'exploitation (OS) et fonctionne de manière isolée.
+Ressources : Plus gourmandes en ressources car chaque VM inclut un OS complet.
+Performance : Légèrement moins performantes en raison de l'overhead du hyperviseur.
+Utilisation : Idéal pour des applications qui nécessitent un environnement complet et isolé, ou pour faire tourner différents OS sur une même machine physique.
+Containers :
+
+Isolation : Partagent le même noyau du système d'exploitation, mais fonctionnent en isolation.
+Ressources : Plus légers car ils partagent le même noyau OS et consomment moins de ressources.
+Performance : Plus performants car il y a moins d'overhead.
+Utilisation : Idéal pour des microservices, des applications qui nécessitent des déploiements rapides et évolutifs.
+2. Qu'est-ce qu'un cluster ?
+ de cluster, de groupement de serveurs ou de ferme de calcul (computer cluster en anglais) pour désigner des techniques consistant à regrouper plusieurs ordinateurs indépendants appelés nœuds (node en anglais), afin de permettre une gestion globale et de dépasser les limitations d'un ordinateur pour :
+
+augmenter la disponibilité ;
+faciliter la montée en charge ;
+permettre une répartition de la charge ;
+faciliter la gestion des ressources (processeur, mémoire vive, disques durs, bande passante réseau).
+
+Un cluster est un ensemble de serveurs ou de nœuds interconnectés qui travaillent ensemble pour fournir une meilleure disponibilité, performance, et évolutivité. Les clusters sont souvent utilisés pour répartir des charges de travail importantes, garantir la continuité de service et améliorer la tolérance aux pannes.
+
+3. Comment fonctionne un VPN ?
+Un VPN (Virtual Private Network) fonctionne en créant un tunnel chiffré entre votre appareil et le serveur VPN. Cela permet de masquer votre adresse IP réelle, sécuriser vos données lors de leur transfert et accéder à des ressources réseau de manière sécurisée comme si vous étiez physiquement présent dans le réseau local.
+
+4. Comment remplacer un reverse proxy ?
+Pour remplacer un reverse proxy, vous pouvez utiliser un autre logiciel de reverse proxy comme Nginx, Apache, HAProxy, ou Traefik. Le remplacement implique de configurer le nouveau proxy avec les mêmes règles de redirection, gestion de charge et de sécurisation des connexions SSL/TLS.
+
+5. Questions sur les branches sur GitLab et Jira, outils de gestion de projet :
+GitLab : Système de gestion de version décentralisé. Les branches permettent de travailler sur des fonctionnalités ou corrections de bugs indépendamment du code principal.
+
+Jira : Outil de gestion de projet et de suivi des bugs. Connexion des branches GitLab à Jira pour suivre les progrès.
+
+Autres outils de gestion de projet : Trello, Asana, Monday.com, ClickUp.
+
+6. Principe de SSH
+SSH (Secure Shell) : Protocole de communication sécurisé utilisé pour administrer des systèmes distants via une connexion chiffrée. Utilise des paires de clés publique/privée pour l'authentification.
+
+7. Reverse Proxy
+Reverse Proxy : Serveur intermédiaire qui reçoit les requêtes des clients et les redirige vers le serveur approprié. Utilisé pour équilibrer la charge, sécuriser les applications et fournir une terminologie unique.
+
+8. Modèle OSI
+Modèle OSI (Open Systems Interconnection) : Modèle de référence pour la communication réseau, divisé en sept couches :
+
+Physique
+Liaison de données
+Réseau
+Transport
+Session
+Présentation
+Application
+
+9. VPN site à site
+Un VPN site-à-site permet de connecter deux réseaux locaux via une connexion sécurisée sur Internet, comme s'ils faisaient partie du même réseau. Utilisé pour connecter différents bureaux ou filiales.
+
+10. Pourquoi choisir Azure pour la base de données ?
+Azure offre des services de bases de données robustes, évolutifs et gérés, comme Azure SQL Database et Cosmos DB. Avantages : intégration facile avec d'autres services Azure, haute disponibilité, sécurité avancée, et options de conformité.
+
+11. Comment fonctionne concrètement
+12. Les couches réseau
+Les couches réseau sont définies par le modèle OSI, qui décrit les différentes étapes et protocoles de la communication réseau. Chaque couche a une fonction spécifique :
+
+Physique : Transmission des bits sur un support physique.
+Liaison de données : Transfert de trames entre deux machines connectées directement.
+Réseau : Acheminement des paquets à travers un réseau.
+Transport : Transmission fiable des segments de données.
+Session : Gestion des sessions de communication.
+Présentation : Traduction des données pour l'application.
+Application : Interface utilisateur et applications réseau.

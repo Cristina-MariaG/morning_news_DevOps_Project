@@ -1,0 +1,23 @@
+# Use the official Node.js image as a base image
+FROM node:16
+
+# Define the build argument for the backend API URL
+ARG NEXT_PUBLIC_BACKEND_API
+
+# Set the environment variable for the backend API URL
+ENV NEXT_PUBLIC_BACKEND=${NEXT_PUBLIC_BACKEND_API}
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy all the files from the current directory to the working directory inside the container
+COPY . .
+
+# Clean the yarn cache, install dependencies, and build the application
+RUN yarn cache clean && yarn install && yarn build
+
+# Expose port 3000 to the host machine
+EXPOSE 3000
+
+# Command to run the application
+CMD ["yarn", "start"]

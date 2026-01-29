@@ -1,0 +1,13 @@
+global:
+  smtp_smarthost: 'smtp.gmail.com:587'
+  smtp_from: 'bastien.siguier@gmail.com'
+  smtp_auth_username: 'bastien.siguier@gmail.com'
+  smtp_auth_password: 'vstr uxsi qxdk selu'
+
+route:
+  receiver: 'email-notifications'
+
+receivers:
+- name: 'email-notifications'
+  email_configs:
+  - to: 'the_vraal@hotmail.fr'

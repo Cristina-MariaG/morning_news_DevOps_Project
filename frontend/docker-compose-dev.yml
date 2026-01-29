@@ -1,0 +1,9 @@
+services:
+  frontend:
+    image: miksiei-front
+    build: .
+    container_name: miksiei-frontend
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "3000:3000"

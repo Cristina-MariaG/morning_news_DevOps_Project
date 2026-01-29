@@ -1,0 +1,87 @@
+image: node:16.17
+
+test-jest:
+  stage: test
+  script:
+    - yarn add --dev jest
+    - yarn test
+  rules:
+    - if: "$CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'pre-prod'"
+
+test-cypress:
+  stage: test
+  image: cypress/browsers:node16.17.1-chrome105-ff104-edge
+  script:
+    - yarn install
+    - yarn run build
+    - yarn dev &
+    - npx wait-on http://localhost:3001
+    - yarn run e2e:chrome
+  rules:
+    - if: "$CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'pre-prod'"
+
+pain-test:
+  stage: test
+  image: nikolaik/python-nodejs:latest
+  script:
+    - pip3 install locust
+    - yarn install
+    - yarn dev &
+    - locust --headless --users 100 --spawn-rate 20 -H http://localhost:3001 -t 5s
+  rules:
+    - if: "$CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'pre-prod'"
+
+eslint-test:
+  stage: test
+  image: node:16
+  script:
+    - yarn install
+    - yarn eslint
+  rules:
+    - if: "$CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'dev'"
+
+build_publish_image_pre_prod:
+  stage: build
+  image: docker:26.0.2
+  services:
+    - docker:26.0.2-dind
+  script:
+    - docker login -u $USERNAME_DOCKERHUB -p $PASSWORD_DOCKERHUB
+    - docker build -t $USERNAME_DOCKERHUB/$PROJECT_NAME_DOCKERHUB --build-arg NEXT_PUBLIC_BACKEND_API=$NEXT_PUBLIC_BACKEND -f Dockerfile-pre-prod .
+    - docker push $USERNAME_DOCKERHUB/$PROJECT_NAME_DOCKERHUB
+  rules:
+    - if: "$CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'pre-prod'"
+
+update_docker_image_pre_prod:
+  stage: deploy
+  image: debian:stable
+  before_script:
+    - apt-get update
+    - apt-get install -y openssh-client
+    - mkdir -p ~/.ssh
+    - echo "$MIKSIEI_KEY_SSH_FINAL_PROJECT" > ~/.ssh/temp_ssh_key
+    - chmod 600 ~/.ssh/temp_ssh_key
+  script:
+    - ssh -T -o StrictHostKeyChecking=no -i ~/.ssh/temp_ssh_key admin@$PUBLIC_IP_EC2_INSTANCE "docker compose pull && docker compose up -d"
+    - rm ~/.ssh/temp_ssh_key
+  dependencies:
+    - build_publish_image
+  rules:
+    - if: "$CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'pre-prod'"
+
+variables:
+  SONAR_USER_HOME: '${CI_PROJECT_DIR}/.sonar'
+  GIT_DEPTH: '0'
+sonarcloud-check:
+  image:
+    name: sonarsource/sonar-scanner-cli:latest
+    entrypoint: ['']
+  cache:
+    key: '${CI_JOB_NAME}'
+    paths:
+      - .sonar/cache
+  script:
+    - sonar-scanner
+  only:
+    - merge_requests
+    - dev

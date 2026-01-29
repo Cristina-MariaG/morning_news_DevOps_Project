@@ -1,0 +1,87 @@
+- name: Setup node-exporter service
+  hosts: aws_backend_server
+  become: yes
+  gather_facts: no
+  remote_user: admin
+  tasks:
+    - name: Install wget package
+      apt:
+        name: wget
+        state: latest
+        update_cache: yes
+      become: yes
+  
+    - name: Download node exporter
+      command: wget https://github.com/prometheus/node_exporter/releases/download/v1.8.0/node_exporter-1.8.0.linux-amd64.tar.gz    
+      
+    - name: Extract node exporter archieve
+      command: tar xvfz node_exporter-1.8.0.linux-amd64.tar.gz
+  
+    - name: Move node-exporter to /usr/local/bin
+      command: mv node_exporter-1.8.0.linux-amd64/node_exporter /usr/local/bin/
+      become: yes
+        
+    - name: Create node_exporter user
+      user:
+        name: node_exporter
+        system: yes
+        create_home: no        
+        shell: /bin/false
+      become: yes
+  
+    - name: Copy node_exporter.service file to /etc/systemd/system/
+      copy:
+        src: node_exporter.service
+        dest: /etc/systemd/system/node_exporter.service
+        mode: '0644'
+      become: yes
+  
+    - name: Restart and enable node exporter service
+      systemd:
+        name: node_exporter
+        state: restarted
+        enabled: yes
+        daemon_reload: yes
+      become: yes 
+
+    - name: Install Docker required packages
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg2
+          - software-properties-common
+  
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/debian/gpg
+        state: present
+  
+    - name: Add Docker repository
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/debian bullseye stable
+        state: present
+  
+    - name: Install Docker Engine
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+  
+    - name: Add user to docker group
+      user:
+        name: "{{ ansible_user }}"
+        groups: docker
+  
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started       
+      
+    - name: Install Docker-Compose
+      get_url:
+        url : https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64
+        dest: /usr/local/bin/docker-compose
+        mode: '755'

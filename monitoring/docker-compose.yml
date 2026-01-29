@@ -1,0 +1,86 @@
+services:
+  proxy:
+    image: "docker.io/jc21/nginx-proxy-manager:latest"
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "81:81"
+      - "443:443"
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - "./config:/etc/prometheus"
+    links:
+      - alertmanager:alertmanager
+    ports:
+      - "9090:9090"
+
+  blackbox-exporter:
+    image: prom/blackbox-exporter
+    container_name: blackbox-exporter
+    ports:
+      - "9115:9115"
+
+  # Grafana
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-pgdata:/var/lib/postgresql/data
+      - grafana-plugindata:/var/lib/grafana/plugins/
+      - ./export:/var/export
+      - ./initdb/:/docker-entrypoint-initdb.d/
+    environment:
+      - GF_DATE_FORMATS_FULL_DATE=DD-MM-YYYY HH:mm:ss
+      - GF_DATE_FORMATS_INTERVAL_DAY=DD/MM
+      - GF_DATE_FORMATS_INTERVAL_HOUR=DD/MM HH:mm
+      - GF_DATE_FORMATS_INTERVAL_MONTH=MM-YYYY
+      - GF_DATABASE_TYPE=postgres
+      - GF_DATABASE_HOST=grafana-storage
+      - GF_DATABASE_NAME=grafana
+      - GF_DATABASE_USER=admin
+      - GF_DATABASE_PASSWORD=grafoulefoufou343@!
+
+  # Grafana database
+  grafana-storage:
+    image: postgres:10-alpine
+    volumes:
+      - grafana-pgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=grafoulefoufou343@!
+      - POSTGRES_USER=admin
+      - POSTGRES_DB=grafana
+
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    container_name: node_exporter
+    command:
+      - "--path.rootfs=/host"
+    network_mode: host
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - "/:/host:ro,rslave"
+    ports:
+      - "9100:9100"
+
+  alertmanager:
+    image: prom/alertmanager
+    restart: always
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./alertmanager/:/etc/alertmanager
+
+volumes:
+  # Grafana
+  grafana-pgdata:
+  grafana-plugindata:
