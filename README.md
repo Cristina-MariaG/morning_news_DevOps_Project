@@ -234,6 +234,7 @@ services:
 
 ---
 
+
 ## 📦 Installation & Déploiement
 
 ### Prérequis
@@ -341,16 +342,3 @@ Développeuse Full-Stack & Ingénieure DevOps
 
 ---
 
-## 📄 Licence
-
-Ce projet a été réalisé dans un cadre pédagogique pour l'obtention du diplôme d'Administrateur Système DevOps (BAC+3/4) à La Capsule Paris.
-
----
-
-## 🙏 Remerciements
-
-Merci aux formateurs de La Capsule pour leur accompagnement, ainsi qu'à toute l'équipe pédagogique pour leur soutien durant ce projet.
-
----
-
-*Dernière mise à jour : Janvier 2025*
