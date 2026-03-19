@@ -2,6 +2,8 @@
 
 > Mise en production complète d'une application de news avec infrastructure cloud, CI/CD, monitoring et bonnes pratiques DevOps
 
+> This project was originally developed and versioned on **GitLab**, where the full commit history lives. It was later mirrored here on GitHub to centralize my public portfolio. As a result, the GitHub commit history may appear as a single push — this does not reflect the actual development process, which was iterative and incremental on GitLab.
+
 [![Infrastructure](https://img.shields.io/badge/Infrastructure-AWS-orange)](https://aws.amazon.com/)
 [![CI/CD](https://img.shields.io/badge/CI%2FCD-GitLab-blue)](https://gitlab.com/)
 [![Monitoring](https://img.shields.io/badge/Monitoring-Prometheus%2FGrafana-green)](https://grafana.com/)
